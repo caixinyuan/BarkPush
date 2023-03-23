@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bark推送</title>
+    <link href="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/5.2.3/css/bootstrap.css" rel="stylesheet">
+    <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+    <script src="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/5.2.3/js/bootstrap.js"></script>
+    <style>
+    .ys-float-btn {
+    color: #666;
+    z-index: 2000;
+    transition: all 0.3s;
+    position: fixed;
+    bottom: 20vw;
+    width: 120px;
+    white-space: nowrap;
+    }
+    </style>
+</head>
+<body>
+    <div class= "mt-4 m-auto" style="width:70%;height:90%">
+
+    <div class="form-floating mt-5 mb-3">
+        <input type="text" class="form-control" id="keyPush" placeholder="key">
+        <label style="opacity:0.4;" for="floatingInput">推送KEY</label>
+    </div>
+
+
+
+    <div class="form-floating mb-3">
+        <!-- <div id="titlePushHelp" class="form-text">推送标题</div>
+        <input type="text" class="form-control" id="titlePush" placeholder="推送标题"> -->
+        <input type="email" class="form-control" id="titlePush" placeholder="推送标题">
+        <label style="opacity:0.4;" for="floatingInputValue">推送标题</label>
+    </div>
+
+    <div class="form-floating mb-3">
+        <!-- <div id="bodyPushHelp" class="form-text">推送内容</div>
+        <input type="text" class="form-control" id="bodyPush" placeholder="推送内容"> -->
+        <input type="text" class="form-control" id="bodyPush" placeholder="推送内容">
+        <label style="opacity:0.4;" for="floatingInput">推送内容</label>
+    </div>
+
+    <div class="mb-3">
+        <!-- <input type="text" class="form-control" id="levelPush" placeholder="推送中断级别"> -->
+        <!-- <div id="levelPushHelp" class="form-text">推送中断级别。
+            active：默认值，系统会立即亮屏显示通知。
+            timeSensitive：时效性通知，可在专注状态下显示通知。
+            passive：仅将通知添加到通知列表，不会亮屏提醒。
+        </div> -->
+
+        <div id="levelPushHelp" class="form-text">推送中断级别。</div>
+        <div class="form-check form-switch">
+            <input class="form-check-input" type="radio" name="levelPush"  value="active" checked>
+            <label class="form-check-label" style="opacity:0.4;" for="flexSwitchCheckDefault">active：默认值，系统会立即亮屏显示通知。</label>
+        </div>
+        <div class="form-check form-switch">
+            <input class="form-check-input" type="radio" name="levelPush"  value="timeSensitive">
+            <label class="form-check-label" style="opacity:0.4;" for="flexSwitchCheckChecked">timeSensitive：时效性通知，可在专注状态下显示通知。</label>
+        </div>
+        <div class="form-check form-switch">
+            <input class="form-check-input" type="radio" name="levelPush"  value="passive">
+            <label class="form-check-label" style="opacity:0.4;" for="flexSwitchCheckChecked">passive：仅将通知添加到通知列表，不会亮屏提醒。</label>
+        </div>
+    </div>
+    <div class="form-floating mb-3">
+        <!-- <input type="text" onkeyup="this.value=this.value.replace(/\D/g,'')">
+            <div id="badgePushHelp" class="form-text">推送角标，可以是任意数字</div>
+            <input type="text" class="form-control" id="badgePush" placeholder="推送角标"> -->
+        <input type="number" class="form-control" id="badgePush" placeholder="推送角标，可以是任意数字">
+        <label style="opacity:0.4;" for="floatingInputValue">推送角标，可以是任意数字</label>
+    </div>
+    <div class="mb-4">
+            <!-- <input type="text" class="form-control" id="autoCopyPush" placeholder="是否自动复制"> -->
+            <div id="autoCopyPushHelp" class="form-text">是否自动复制</div>
+         <div class="form-check form-switch">
+            <input class="form-check-input" type="checkbox" id="autoCopyPush" value="true">
+            <label class="form-check-label" style="opacity:0.4;" for="flexSwitchCheckDefault">iOS14.5以下自动复制推送内容，iOS14.5以上需手动长按推送或下拉推送</label>
+        </div>
+        </div>
+    <div class="mb-2">
+        <div class="form-floating">
+            <textarea class="form-control" placeholder=" 复制推送时，指定复制的内容，不传此参数将复制整个推送内容。" id="floatingTextarea2"
+                style="height: 100px"></textarea>
+            <label style="opacity:0.4;" for="floatingTextarea2">复制内容 复制推送时，指定复制的内容，不传此参数将复制整个推送内容。</label>
+        </div>
+
+
+            <!-- <div id="copyPushHelp" class="form-text">复制内容 复制推送时，指定复制的内容，不传此参数将复制整个推送内容。</div>
+            <input type="text" class="form-control" id="copyPush" placeholder="复制内容"> -->
+    </div>
+    <div class="form-floating mb-2">
+            <!-- <input type="text" class="form-control" id="soundPush" placeholder="推送声音">
+            <div id="soundPushHelp" class="form-text">可以为推送设置不同的铃声</div> -->
+
+
+            <select class="form-select" id="soundPush" aria-label="Floating label select example">
+                <option selected>----请选择---</option>
+                <option  value="alarm">alarm</option>
+                <option  value="anticipate">anticipate</option>
+                <option  value="bell">bell</option>
+                <option  value="birdsong">birdsong</option>
+                <option  value="bloom">bloom</option>
+                <option  value="calypso">calypso</option>
+                <option  value="chime">chime</option>
+                <option  value="choo">choo</option>
+                <option  value="descent">descent</option>
+                <option  value="electronic">electronic</option>
+                <option  value="fanfare">fanfare</option>
+                <option  value="glass">glass</option>
+                <option  value="gotosleep">gotosleep</option>
+                <option  value="healthnotification">healthnotification</option>
+                <option  value="horn">horn</option>
+                <option  value="ladder">ladder</option>
+                <option  value="mailsent">mailsent</option>
+                <option  value="minuet">minuet</option>
+                <option  value="multiwayinvitation">multiwayinvitation</option>
+                <option  value="newmail">newmail</option>
+                <option  value="newsflash">newsflash</option>
+                <option  value="noir">noir</option>
+                <option  value="paymentsuccess">paymentsuccess</option>
+                <option  value="shake">shake</option>
+                <option  value="sherwoodforest">sherwoodforest</option>
+                <option  value="silence">silence</option>
+                <option  value="spell">spell</option>
+                <option  value="suspense">suspense</option>
+                <option  value="telegraph">telegraph</option>
+                <option  value="tiptoes">tiptoes</option>
+                <option  value="typewriters">typewriters</option>
+                <option  value="update">update</option>
+            </select>
+            <label style="opacity:0.4;" for="floatingSelect">推送声音</label>
+
+
+    </div>
+    <div class="form-floating mb-3">
+
+            <input type="text" class="form-control" id="iconPush" placeholder="推送图标">
+            <label style="opacity:0.4;" for="floatingInput">推送图标 为推送设置自定义图标，设置的图标将替换默认Bark图标。图标会自动缓存在本机，相同的图标 URL 仅下载一次。</label>
+            <!-- <input type="text" class="form-control" id="iconPush" placeholder="推送图标">
+            <div id="iconPushHelp" class="form-text">为推送设置自定义图标，设置的图标将替换默认Bark图标。
+                        图标会自动缓存在本机，相同的图标 URL 仅下载一次。</div> -->
+    </div>
+    <div class="form-floating mb-2">
+            <!-- <input type="text" class="form-control" id="groupPush" placeholder="推送分组">
+            <div id="groupPushHelp" class="form-text">对消息进行分组，推送将按group分组显示在通知中心中。
+                            也可在历史消息列表中选择查看不同的群组。</div> -->
+
+            <input type="text" class="form-control" id="groupPush" placeholder="推送分组">
+            <label style="opacity:0.4;" for="floatingInput">推送分组 对消息进行分组，推送将按group分组显示在通知中心中。也可在历史消息列表中选择查看不同的群组。</label>
+    </div>
+    <div class="form-floating mb-2">
+
+          <!-- <input type="text" class="form-control" id="isArchivePush" placeholder="推送是否保存"> -->
+        <div id="isArchivePushHelp" class="form-text">推送是否保存</div> 
+        <div class="form-check form-switch">
+            <input class="form-check-input" type="checkbox" id="isArchivePush" name="isArchivePush" value="1">
+            <label style="opacity:0.4;" class="form-check-label" for="flexSwitchCheckDefault">推送是否保存，不传按APP内设置来决定是否保存。</label>
+        </div>
+    </div>
+    <div class="form-floating mb-2">
+            <!-- <input type="text" class="form-control" id="urlPush" placeholder="推送url">
+            <div id="urlPushHelp" class="form-text">点击推送时，跳转的URL ，支持URL Scheme 和 Universal Link</div> -->
+            <input type="text" class="form-control" id="urlPush" placeholder="推送url">
+            <label style="opacity:0.4;" for="floatingInput">点击推送时，跳转的URL ，支持URL Scheme 和 Universal Link</label>
+     </div>
+    <!-- <div class="d-grid">
+        <button id="buttonPush" type="button" class="btn btn-primary btn-block">推送</button>
+    </div> -->
+</div>
+
+
+<div class="alert alert-success fade" style="position: fixed;width: 100%;height: 7%; text-align:center;">
+    <strong>推送信息成功</strong> 
+</div>
+<div class="alert alert-danger fade" style=" position: fixed;width: 100%;height: 7%; text-align:center;">
+    <strong>推送信息失败</strong>
+</div>
+<div id="keyNullTips" class="alert alert-info fade" style=" position: fixed;width: 100%;height: 7%; text-align:center;">
+    <strong>KEY值不能为空</strong>
+</div>
+<!-- Flexbox container for aligning the toasts -->
+<!-- <div aria-live="polite" aria-atomic="true" class="d-flex justify-content-center align-items-center w-100"> -->
+    <!-- Then put toasts within -->
+        <!-- <div class="toast toast-container position-absolute p-3 top-50 start-50 translate-middle" role="alert" aria-live="assertive"
+            aria-atomic="true"> -->
+    <!-- <div class="toast" role="alert" aria-live="assertive" aria-atomic="true"> -->
+        <!-- <div class="toast-header">
+            <strong class="me-auto">提示</strong>
+            <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+        <div class="toast-body">
+            消息推送成功
+        </div>
+    </div>
+</div> -->
+
+<!-- Flexbox container for aligning the toasts -->
+<!-- <div aria-live="polite" aria-atomic="true" class="d-flex justify-content-center align-items-center w-100">
+    <div class="toast toast-container position-absolute p-3 top-50 start-50 translate-middle" role="alert"
+        aria-live="assertive" aria-atomic="true">
+        <div class="toast-header">
+            <strong class="me-auto">提示</strong>
+            <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+        <div class="toast-body">
+            消息推送失败
+        </div>
+    </div>
+</div> -->
+
+<div class="ys-float-btn" style="width:20px;height: 30px;left:0px;top:0px"
+    ref="div" ontouchstart="dragStart(this)"  id="div" ontouchend="dragEnd(this)" ontouchmove="dragProgress(this)" 
+    onmousedown="dragStart(this)" onmouseup="dragEnd(this)" onmousemove="dragProgress(this)"
+    > 
+    <img src="./image/push2.png" alt="推送" title="推送" />
+    <span id="pushButton" style="position: absolute; left: -2px;top: 30px;">推送</span>
+</div>
+
+</body>
+</html>
+<script>
+    var toastElList = [].slice.call(document.querySelectorAll('.toast'))
+    var toastList = toastElList.map(function (toastEl) {
+        return new bootstrap.Toast(toastEl, { autohide :true})
+    })
+</script>
+<script>
+
+       var  clientWidth= document.documentElement.clientWidth,
+            clientHeight= document.documentElement.clientHeight,
+            gapWidth= 10,
+            itemWidth= 30, // 图标的宽度
+            itemHeight= 32, // 图标的高度
+            left = clientWidth - itemWidth - gapWidth,
+            topn = clientHeight * 0.8;
+
+    $("#div").css({ "width": itemHeight+"px", "height": itemHeight+"px", "left": (left)+"px", "top": topn+"px" });
+
+
+    function dragStart(e) {
+        e.style.transition = 'none';
+    }
+    function  dragEnd(e) {
+       e.style.transition = 'all 0.3s';
+        if (left > clientWidth / 2) {
+            left = clientWidth - itemWidth - gapWidth;
+        } else {
+            left = gapWidth;
+        }
+          $("#div").css("left", left);
+    }
+    function dragProgress(e) {
+        console.log(1)
+            if (event.targetTouches.length === 1) {
+                let touch = event.targetTouches[0];
+                left = touch.clientX - itemWidth / 2;
+                $("#div").css("left", left);
+                topn = touch.clientY - itemHeight / 2;
+                $("#div").css("top", topn);
+            }
+        }
+</script>
+<script>
+var key= getUrlParams("key");
+if(key!=null&&key!==""){
+    $("#keyPush").val(key);
+}
+
+
+    // "D63FSMNdamcYnQd8dtfpFe"
+$("#pushButton").click(()=>{
+    var key= $("#keyPush").val();
+    if(key===""||key===null){
+        key= getUrlParams("key");
+        if (key === "" || key === null){
+            $(".alert-info").addClass("show")
+            $(".alert-info").css("top", topn / 2);
+            setTimeout(() => {
+                $(".alert-info").removeClass("show")
+            }, 1000);
+            return;
+         }
+    }
+    var title=$("#titlePush").val();
+    var body	= $("#bodyPush").val();
+    var level	= $("input[name='levelPush']:checked").val();
+    var badge	= $("#badgePush").val();
+    var autoCopy	= $('#autoCopyPush').is(":checked");
+    var copy	= $("#copyPush").val();
+    var sound	= $("#soundPush").val();
+    var icon	= $("#iconPush").val();
+    var group	= $("#groupPush").val();
+    var isArchive	=$('#isArchivePush').is(":checked");
+    var url	= $("#urlPush").val();
+    var pushData={
+    device_key:key
+    };
+    if (title!=""){
+    pushData.title=title;
+    }
+    if(body != ""){
+        pushData.body = body;
+    }   
+     if (level != ""&&level!="active") {
+        pushData.level = level;
+    }   
+     if (badge != "") {
+        pushData.badge = badge;
+    }   
+     if (autoCopy != ""&&autoCopy) {
+        pushData.autoCopy = autoCopy;
+    }  
+      if (copy != "") {
+        pushData.copy = copy;
+    }   
+     if (sound != ""&&sound!="----请选择---") {
+        pushData.sound = sound;
+    }  
+      if (icon != "") {
+        pushData.icon = icon;
+    }  
+      if (group != "") {
+        pushData.group = group;
+    }  
+      if (isArchive != ""&isArchive) {
+        pushData.isArchive = 1;
+    }  
+      if (url != "") {
+        pushData.url = url;
+    }       
+    $.ajax({
+        url:"http://121.36.12.108:8086/bark/push",
+        type:"post",
+        data:pushData,
+        success:(res)=>{
+            console.log(res);
+            if(res.code===200&&res.message=== "success"){
+                $(".alert-success").addClass("show")
+                $(".alert-success").css("top", topn / 2);
+                setTimeout(() => {
+                    $(".alert-success").removeClass("show")
+                }, 2000);
+            }
+        },
+        error:(res)=>{
+                $(".alert-danger").addClass("show")
+                $(".alert-danger").css("top", topn / 2);
+                setTimeout(() => {
+                    $(".alert-danger").removeClass("show")
+                }, 2000);
+        }
+    });
+});
+function getUrlParams(key) {
+        var url = window.location.search.substr(1);
+        if (url == '') {
+            return null;
+        }
+        var paramsArr = url.split('&');
+        for (var i = 0; i < paramsArr.length; i++) {
+            var combina = paramsArr[i].split("=");
+            if (combina[0] == key) {
+                return combina[1];
+            }
+        }
+        return null;
+}
+</script>
